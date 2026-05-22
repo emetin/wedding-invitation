@@ -8,10 +8,14 @@ let drawingContext = null;
 let isDrawing = false;
 let hasDrawing = false;
 
+let heroLottie = null;
+let introOpened = false;
+
 const introScreen = document.getElementById("introScreen");
 const invitationContent = document.getElementById("invitationContent");
-const openInvitationBtn = document.getElementById("openInvitationBtn");
-const ribbonWrap = document.getElementById("ribbonWrap");
+const introGateVideo = document.getElementById("introGateVideo");
+
+const heroFloralAnimation = document.getElementById("heroFloralAnimation");
 
 const introNames = document.getElementById("introNames");
 const introDate = document.getElementById("introDate");
@@ -33,7 +37,8 @@ const photoForm = document.getElementById("photoForm");
 const photoStatus = document.getElementById("photoStatus");
 
 document.addEventListener("DOMContentLoaded", async () => {
-  setupIntroAnimation();
+  setupIntroGateAutoPlay();
+  setupHeroAnimation();
   setupDrawingCanvas();
   setupMessageForm();
   setupPhotoForm();
@@ -74,13 +79,13 @@ async function loadWeddingData() {
 function renderFallbackWeddingData() {
   const fallbackData = {
     id: null,
-    bride_name: "Ayşe",
-    groom_name: "Mert",
+    bride_name: "Sema",
+    groom_name: "Emre",
     wedding_date: "2026-06-28",
     wedding_time: "19:30",
-    venue_name: "Düğün Salonu",
-    venue_address: "Salon açık adresi buraya gelecek",
-    map_url: "https://maps.google.com"
+    venue_name: "Masal Kır Düğün Salonu",
+    venue_address: "Masal Kır Düğün Salonu",
+    map_url: "https://www.google.com/maps/search/?api=1&query=Masal+Kır+Düğün+Salonu"
   };
 
   renderWeddingData(fallbackData);
@@ -92,47 +97,87 @@ function renderWeddingData(data) {
 
   document.title = `${names} | Düğün Davetiyesi`;
 
-  introNames.textContent = names;
-  introDate.textContent = formattedDate;
+  if (introNames) introNames.textContent = names;
+  if (introDate) introDate.textContent = formattedDate;
 
-  coupleNames.textContent = names;
-  weddingDateText.textContent = formattedDate;
+  if (coupleNames) coupleNames.textContent = names;
+  if (weddingDateText) weddingDateText.textContent = formattedDate;
 
-  detailDate.textContent = formattedDate;
-  detailTime.textContent = data.wedding_time || "Saat bilgisi eklenecek";
-  detailVenue.textContent = data.venue_name || "Mekan bilgisi eklenecek";
-  detailAddress.textContent = data.venue_address || "Adres bilgisi eklenecek";
+  if (detailDate) detailDate.textContent = formattedDate;
+  if (detailTime) detailTime.textContent = data.wedding_time || "Saat bilgisi eklenecek";
+  if (detailVenue) detailVenue.textContent = data.venue_name || "Mekan bilgisi eklenecek";
+  if (detailAddress) detailAddress.textContent = data.venue_address || "Adres bilgisi eklenecek";
 
-  locationVenueText.textContent = data.venue_name || "Düğün Konumu";
-  mapButton.href = data.map_url || "#";
+  if (locationVenueText) {
+    locationVenueText.textContent = data.venue_name || "Düğün Konumu";
+  }
 
-  finalNames.textContent = `Sevgiyle, ${names}`;
+  if (mapButton) {
+    mapButton.href = data.map_url || "https://www.google.com/maps/search/?api=1&query=Masal+Kır+Düğün+Salonu";
+  }
+
+  if (finalNames) {
+    finalNames.textContent = `Sevgiyle, ${names}`;
+  }
 }
 
-function setupIntroAnimation() {
-  if (!openInvitationBtn || !introScreen || !invitationContent || !ribbonWrap) {
-    console.error("Intro elementlerinden biri bulunamadı.");
+function setupIntroGateAutoPlay() {
+  if (!introScreen || !invitationContent || !introGateVideo) {
+    console.error("Intro gate elementlerinden biri bulunamadı.");
     return;
   }
 
-  openInvitationBtn.addEventListener("click", openInvitation);
+  introGateVideo.muted = true;
+  introGateVideo.playsInline = true;
+  introGateVideo.currentTime = 0;
 
-  ribbonWrap.addEventListener("click", openInvitation);
+  introGateVideo.addEventListener("ended", showInvitationContent);
+
+  introGateVideo.addEventListener("error", () => {
+    console.error("Intro video yüklenemedi.");
+    setTimeout(showInvitationContent, 1200);
+  });
+
+  const playPromise = introGateVideo.play();
+
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        introScreen.classList.add("is-video-playing");
+      })
+      .catch((error) => {
+        console.error("Intro video otomatik oynatılamadı:", error);
+        setTimeout(showInvitationContent, 1200);
+      });
+  } else {
+    introScreen.classList.add("is-video-playing");
+  }
 }
 
-function openInvitation() {
-  if (openInvitationBtn.disabled) return;
+function showInvitationContent() {
+  if (introOpened) return;
 
-  ribbonWrap.classList.add("is-opened");
+  introOpened = true;
 
-  openInvitationBtn.disabled = true;
-  openInvitationBtn.textContent = "Açılıyor...";
+  introScreen.classList.add("intro-leaving");
 
   setTimeout(() => {
     introScreen.classList.add("is-hidden");
     invitationContent.classList.remove("is-hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, 1050);
+  }, 900);
+}
+
+function setupHeroAnimation() {
+  if (!heroFloralAnimation || typeof lottie === "undefined") return;
+
+  heroLottie = lottie.loadAnimation({
+    container: heroFloralAnimation,
+    renderer: "svg",
+    loop: true,
+    autoplay: true,
+    path: "assets/animations/wedding-floral.json"
+  });
 }
 
 /* DRAWING CANVAS */
@@ -175,7 +220,7 @@ function resizeCanvas() {
   drawingContext.lineCap = "round";
   drawingContext.lineJoin = "round";
   drawingContext.lineWidth = 3;
-  drawingContext.strokeStyle = "#8f555a";
+  drawingContext.strokeStyle = "#8a5f5b";
 }
 
 function getPointerPosition(event) {
@@ -245,8 +290,6 @@ function setupMessageForm() {
     }
 
     const guestName = document.getElementById("guestName").value.trim();
-    const attendanceStatus = document.getElementById("attendanceStatus").value;
-    const guestCount = Number(document.getElementById("guestCount").value || 1);
     const messageText = document.getElementById("messageText").value.trim();
 
     if (!guestName) {
@@ -281,8 +324,8 @@ function setupMessageForm() {
       .insert({
         wedding_id: currentWeddingId,
         guest_name: guestName,
-        attendance_status: attendanceStatus,
-        guest_count: guestCount,
+        attendance_status: "Not bilgisi",
+        guest_count: 1,
         message_text: messageText,
         drawing_url: drawingUrl
       });

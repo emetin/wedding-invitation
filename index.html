@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Ayşe & Mert | Düğün Davetiyesi</title>
+  <title>Sema & Emre | Düğün Davetiyesi</title>
 
-  <meta name="description" content="Ayşe ve Mert'in düğün davetiyesi." />
-  <meta name="theme-color" content="#f7fbfd" />
+  <meta name="description" content="Sema ve Emre'nin düğün davetiyesi." />
+  <meta name="theme-color" content="#d7e4cf" />
 
   <link rel="stylesheet" href="assets/css/style.css" />
 
@@ -18,182 +18,201 @@
 <body>
   <main class="mobile-app">
     <section id="introScreen" class="intro-screen">
-      <div class="intro-bg" aria-hidden="true">
-        <span class="soft-circle circle-1"></span>
-        <span class="soft-circle circle-2"></span>
-        <span class="soft-circle circle-3"></span>
-      </div>
+      <video
+        id="introGateVideo"
+        class="intro-gate-video"
+        src="assets/videos/open-gate.mp4"
+        muted
+        playsinline
+        autoplay
+        preload="auto"
+      ></video>
 
-      <div class="intro-card">
+      <div class="intro-loading-layer">
         <p class="eyebrow">Haziran Düğün Daveti</p>
-
-        <div id="floralAnimation" class="floral-animation"></div>
 
         <div class="intro-names-box">
           <span class="small-script">Düğün Davetiyesi</span>
-          <h1 id="introNames">Ayşe & Mert</h1>
-          <p id="introDate">22 Ağustos 2026</p>
+          <h1 id="introNames">Sema & Emre</h1>
+          <p id="introDate">28 Haziran 2026</p>
         </div>
 
-        <button id="openInvitationBtn" class="main-button open-button">
-          Davetiyeyi Aç
-        </button>
+        <p class="intro-loading-text">Davetiyeniz hazırlanıyor...</p>
+      </div>
 
-        <p class="intro-note">
-          Davetiyeyi görmek için dokunun.
-        </p>
+      <div class="intro-video-title" aria-hidden="true">
+        <span>Düğün Davetiyesi</span>
+        <h1>Sema & Emre</h1>
+        <p>28 Haziran 2026</p>
       </div>
     </section>
 
     <section id="invitationContent" class="invitation-content is-hidden">
-      <section class="story-section hero-section">
-        <div id="heroFloralAnimation" class="hero-floral-animation"></div>
+      <div class="floating-decor" aria-hidden="true">
+        <span class="float-item float-1">♡</span>
+        <span class="float-item float-2">❧</span>
+        <span class="float-item float-3">🦋</span>
+        <span class="float-item float-4">✽</span>
+        <span class="float-item float-5">♡</span>
+        <span class="float-item float-6">❦</span>
+        <span class="float-item float-7">🦋</span>
+        <span class="float-item float-8">❧</span>
+        <span class="float-item float-9">✿</span>
+        <span class="float-item float-10">♡</span>
+        <span class="float-item float-11">❧</span>
+        <span class="float-item float-12">🦋</span>
+      </div>
 
-        <p class="eyebrow">Sevgiyle başlayan yeni bir hikaye</p>
-        <h1 id="coupleNames">Ayşe & Mert</h1>
-        <p id="weddingDateText" class="large-date">22 Ağustos 2026</p>
+      <div class="shared-background-block">
+        <section class="story-section hero-section">
+          <div id="heroFloralAnimation" class="hero-floral-animation"></div>
 
-        <p class="section-text">
-          Yaz akşamının zarafeti, sevdiklerimizin duası ve kalplerimizin heyecanıyla bu özel günümüzde sizleri de aramızda görmekten mutluluk duyarız.
-        </p>
+          <p class="eyebrow">Sevgiyle başlayan yeni bir hikaye</p>
+          <h1 id="coupleNames">Sema & Emre</h1>
+          <p id="weddingDateText" class="large-date">28 Haziran 2026</p>
 
-        <div class="scroll-hint">
-          <span></span>
-          Detaylar için kaydırın
-        </div>
-      </section>
+          <p class="section-text">
+            Yaz akşamının zarafeti, sevdiklerimizin duası ve kalplerimizin heyecanıyla bu özel günümüzde sizleri de aramızda görmekten mutluluk duyarız.
+          </p>
 
-      <section class="story-section details-section">
-        <span class="step-label">01</span>
-        <h2>Düğün Detayları</h2>
-
-        <p class="section-text">
-          Mutluluğumuza ortak olmanız bizim için çok kıymetli.
-        </p>
-
-        <div class="glass-card info-card">
-          <div class="info-row">
-            <span>Tarih</span>
-            <strong id="detailDate">22 Ağustos 2026</strong>
+          <div class="scroll-hint">
+            <span></span>
+            Detaylar için kaydırın
           </div>
+        </section>
 
-          <div class="info-row">
-            <span>Saat</span>
-            <strong id="detailTime">19:30</strong>
-          </div>
+        <section class="story-section details-section">
+          <span class="step-label">01</span>
+          <h2>Düğün Detayları</h2>
 
-          <div class="info-row">
-            <span>Mekan</span>
-            <strong id="detailVenue">Düğün Salonu</strong>
-          </div>
+          <p class="section-text">
+            Mutluluğumuza ortak olmanız bizim için çok kıymetli.
+          </p>
 
-          <div class="info-row">
-            <span>Adres</span>
-            <strong id="detailAddress">Salon açık adresi buraya gelecek</strong>
-          </div>
-        </div>
-      </section>
-
-      <section class="story-section location-section">
-        <span class="step-label">02</span>
-        <h2>Konum</h2>
-
-        <p class="section-text">
-          Bu güzel akşamda bize kolayca ulaşabilmeniz için konum bilgisini aşağıda paylaştık.
-        </p>
-
-        <div class="glass-card location-card">
-          <div class="map-icon">♡</div>
-          <p id="locationVenueText">Düğün Salonu</p>
-
-          <a id="mapButton" href="#" target="_blank" rel="noopener" class="main-button link-button">
-            Yol Tarifi Al
-          </a>
-        </div>
-      </section>
-
-      <section class="story-section message-section">
-        <span class="step-label">03</span>
-        <h2>Katılım ve Güzel Notlar</h2>
-
-        <p class="section-text">
-          Katılım durumunuzu bildirebilir, dilerseniz bize yazılı veya çizimli küçük bir hatıra bırakabilirsiniz.
-        </p>
-
-        <form id="messageForm" class="form-card">
-          <label>
-            Ad Soyad
-            <input id="guestName" type="text" placeholder="Adınız Soyadınız" required />
-          </label>
-
-          <label>
-            Katılım Durumu
-            <select id="attendanceStatus">
-              <option value="Geliyorum">Geliyorum</option>
-              <option value="Gelemiyorum">Gelemiyorum</option>
-              <option value="Henüz belli değil">Henüz belli değil</option>
-            </select>
-          </label>
-
-          <label>
-            Kişi Sayısı
-            <input id="guestCount" type="number" value="1" min="1" max="10" />
-          </label>
-
-          <label>
-            Yazılı Not
-            <textarea id="messageText" rows="4" placeholder="Mutluluğumuza eşlik edecek güzel bir not bırakın..."></textarea>
-          </label>
-
-          <div class="drawing-box">
-            <div class="drawing-top">
-              <div>
-                <strong>Çizimli Not</strong>
-                <p>Parmağınızla küçük bir kalp, imza veya çizim bırakabilirsiniz.</p>
-              </div>
-
-              <button id="clearDrawingBtn" type="button" class="small-button">
-                Temizle
-              </button>
+          <div class="glass-card info-card">
+            <div class="info-row">
+              <span>Tarih</span>
+              <strong id="detailDate">28 Haziran 2026</strong>
             </div>
 
-            <canvas id="drawingCanvas"></canvas>
+            <div class="info-row">
+              <span>Saat</span>
+              <strong id="detailTime">19:30</strong>
+            </div>
+
+            <div class="info-row">
+              <span>Mekan</span>
+              <strong id="detailVenue">Masal Kır Düğün Salonu</strong>
+            </div>
+
+            <div class="info-row">
+              <span>Adres</span>
+              <strong id="detailAddress">Masal Kır Düğün Salonu</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="story-section location-section">
+          <span class="step-label">02</span>
+          <h2>Konum</h2>
+
+          <p class="section-text">
+            Düğün salonuna kolayca ulaşabilmeniz için konum bilgisini aşağıda paylaştık.
+          </p>
+
+          <div class="map-card">
+            <p id="locationVenueText" class="map-place-name">Masal Kır Düğün Salonu</p>
+
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2390.2282605512105!2d28.209686927998707!3d38.09859699372296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b8ebe07971c9e1%3A0x67858ba686944b4c!2zTWFzYWwgS8SxciBEw7zEn8O8biBTYWxvbnU!5e0!3m2!1str!2str!4v1779453252166!5m2!1str!2str"
+              class="map-iframe"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Masal Kır Düğün Salonu Konumu"
+            ></iframe>
           </div>
 
-          <button type="submit" class="main-button full-button">
-            Notu Gönder
-          </button>
+          <a
+            id="mapButton"
+            href="https://www.google.com/maps/search/?api=1&query=Masal+Kır+Düğün+Salonu"
+            target="_blank"
+            rel="noopener"
+            class="main-button link-button map-open-button"
+          >
+            Haritada Aç
+          </a>
+        </section>
 
-          <p id="messageStatus" class="status-message"></p>
-        </form>
-      </section>
+        <section class="story-section message-section">
+          <span class="step-label">03</span>
+          <h2>Güzel Notlarınız</h2>
 
-      <section class="story-section upload-section">
-        <span class="step-label">04</span>
-        <h2>Anılarınızı Paylaşın</h2>
+          <p class="section-text">
+            Bu özel güne eşlik edecek güzel dileklerinizi yazabilir, dilerseniz küçük bir çizimle bize hatıra bırakabilirsiniz.
+          </p>
 
-        <p class="section-text">
-          Düğünde yakaladığınız en güzel kareleri bizimle paylaşabilirsiniz.
-        </p>
+          <form id="messageForm" class="form-card elegant-form-card">
+            <label>
+              Ad Soyad
+              <input id="guestName" type="text" placeholder="Adınız Soyadınız" required />
+            </label>
 
-        <form id="photoForm" class="form-card">
-          <label>
-            Yükleyen Kişi
-            <input id="photoGuestName" type="text" placeholder="Adınız Soyadınız" required />
-          </label>
+            <label>
+              Yazılı Not
+              <textarea id="messageText" rows="5" placeholder="Mutluluğumuza eşlik edecek güzel bir not bırakın..."></textarea>
+            </label>
 
-          <label>
-            Fotoğraf
-            <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" required />
-          </label>
+            <div class="drawing-box">
+              <div class="drawing-top">
+                <div>
+                  <strong>Çizimli Not</strong>
+                  <p>Parmağınızla küçük bir kalp, imza veya çizim bırakabilirsiniz.</p>
+                </div>
 
-          <button type="submit" class="main-button full-button">
-            Fotoğrafı Yükle
-          </button>
+                <button id="clearDrawingBtn" type="button" class="small-button">
+                  Temizle
+                </button>
+              </div>
 
-          <p id="photoStatus" class="status-message"></p>
-        </form>
-      </section>
+              <canvas id="drawingCanvas"></canvas>
+            </div>
+
+            <button type="submit" class="main-button full-button">
+              Notu Gönder
+            </button>
+
+            <p id="messageStatus" class="status-message"></p>
+          </form>
+        </section>
+
+        <section class="story-section upload-section">
+          <span class="step-label">04</span>
+          <h2>Anılarınızı Paylaşın</h2>
+
+          <p class="section-text">
+            Düğünde yakaladığınız en güzel kareleri bizimle paylaşabilirsiniz.
+          </p>
+
+          <form id="photoForm" class="form-card">
+            <label>
+              Yükleyen Kişi
+              <input id="photoGuestName" type="text" placeholder="Adınız Soyadınız" required />
+            </label>
+
+            <label>
+              Fotoğraf
+              <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" required />
+            </label>
+
+            <button type="submit" class="main-button full-button">
+              Fotoğrafı Yükle
+            </button>
+
+            <p id="photoStatus" class="status-message"></p>
+          </form>
+        </section>
+      </div>
 
       <section class="story-section final-section">
         <p class="eyebrow">Teşekkürler</p>
@@ -203,7 +222,7 @@
         </h2>
 
         <p id="finalNames" class="section-text">
-          Sevgiyle, Ayşe & Mert
+          Sevgiyle, Sema & Emre
         </p>
       </section>
     </section>
