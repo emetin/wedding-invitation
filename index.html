@@ -7,9 +7,9 @@
   <title>Sema & Emre | Düğün Davetiyesi</title>
 
   <meta name="description" content="Sema ve Emre'nin düğün davetiyesi." />
-  <meta name="theme-color" content="#d7e4cf" />
+  <meta name="theme-color" content="#fbf4ef" />
 
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css?v=frame-scroll-motion-2" />
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
@@ -18,62 +18,59 @@
 <body>
   <main class="mobile-app">
     <section id="introScreen" class="intro-screen">
-      <video
-        id="introGateVideo"
-        class="intro-gate-video"
-        src="assets/videos/open-gate.mp4"
-        muted
-        playsinline
-        autoplay
-        preload="auto"
-      ></video>
+      <div class="intro-sticky">
+        <canvas id="introFrameCanvas" class="intro-frame-canvas"></canvas>
 
-      <div class="intro-loading-layer">
-        <p class="eyebrow">Haziran Düğün Daveti</p>
+        <div class="intro-gradient"></div>
 
-        <div class="intro-names-box">
-          <span class="small-script">Düğün Davetiyesi</span>
-          <h1 id="introNames">Sema & Emre</h1>
-          <p id="introDate">28 Haziran 2026</p>
+        <div class="intro-content">
+          <p class="intro-kicker">Modern Düğün Davetiyesi</p>
+
+          <div class="intro-names-box">
+            <span class="small-script">Sevgiyle başlayan yeni bir hikaye</span>
+            <h1 id="introNames">Sema & Emre</h1>
+            <p id="introDate">28 Haziran 2026</p>
+          </div>
+
+          <div class="intro-scroll-card">
+            <span>Kaydırdıkça davetiye açılır</span>
+            <div class="intro-progress">
+              <i id="introProgressBar"></i>
+            </div>
+          </div>
         </div>
-
-        <p class="intro-loading-text">Davetiyeniz hazırlanıyor...</p>
-      </div>
-
-      <div class="intro-video-title" aria-hidden="true">
-        <span>Düğün Davetiyesi</span>
-        <h1>Sema & Emre</h1>
-        <p>28 Haziran 2026</p>
       </div>
     </section>
 
-    <section id="invitationContent" class="invitation-content is-hidden">
+    <section id="invitationContent" class="invitation-content">
       <div class="floating-decor" aria-hidden="true">
         <span class="float-item float-1">♡</span>
-        <span class="float-item float-2">❧</span>
-        <span class="float-item float-3">🦋</span>
-        <span class="float-item float-4">✽</span>
-        <span class="float-item float-5">♡</span>
-        <span class="float-item float-6">❦</span>
-        <span class="float-item float-7">🦋</span>
-        <span class="float-item float-8">❧</span>
-        <span class="float-item float-9">✿</span>
-        <span class="float-item float-10">♡</span>
-        <span class="float-item float-11">❧</span>
-        <span class="float-item float-12">🦋</span>
+        <span class="float-item float-2">💍</span>
+        <span class="float-item float-3">✨</span>
+        <span class="float-item float-4">♡</span>
+        <span class="float-item float-5">🤍</span>
+        <span class="float-item float-6">💍</span>
+        <span class="float-item float-7">✨</span>
+        <span class="float-item float-8">♡</span>
       </div>
 
       <div class="shared-background-block">
-        <section class="story-section hero-section">
+        <section class="story-section hero-section reveal-section">
           <div id="heroFloralAnimation" class="hero-floral-animation"></div>
 
-          <p class="eyebrow">Sevgiyle başlayan yeni bir hikaye</p>
+          <p class="eyebrow">Davetimize Hoş Geldiniz</p>
           <h1 id="coupleNames">Sema & Emre</h1>
           <p id="weddingDateText" class="large-date">28 Haziran 2026</p>
 
           <p class="section-text">
-            Yaz akşamının zarafeti, sevdiklerimizin duası ve kalplerimizin heyecanıyla bu özel günümüzde sizleri de aramızda görmekten mutluluk duyarız.
+            Yaz akşamının zarafeti, sevdiklerimizin duası ve kalplerimizin heyecanıyla
+            bu özel günümüzde sizleri de aramızda görmekten mutluluk duyarız.
           </p>
+
+          <div class="quick-actions">
+            <a href="#detailsSection" class="main-button link-button">Detayları Gör</a>
+            <a href="#messageSection" class="ghost-button link-button">Not Bırak</a>
+          </div>
 
           <div class="scroll-hint">
             <span></span>
@@ -81,9 +78,13 @@
           </div>
         </section>
 
-        <section class="story-section details-section">
+        <section id="detailsSection" class="story-section details-section reveal-section">
           <span class="step-label">01</span>
-          <h2>Düğün Detayları</h2>
+
+          <div class="section-heading">
+            <p>Davet Bilgileri</p>
+            <h2>Düğün Detayları</h2>
+          </div>
 
           <p class="section-text">
             Mutluluğumuza ortak olmanız bizim için çok kıymetli.
@@ -112,16 +113,27 @@
           </div>
         </section>
 
-        <section class="story-section location-section">
+        <section class="story-section location-section reveal-section">
           <span class="step-label">02</span>
-          <h2>Konum</h2>
+
+          <div class="section-heading">
+            <p>Kolay Ulaşım</p>
+            <h2>Konum</h2>
+          </div>
 
           <p class="section-text">
             Düğün salonuna kolayca ulaşabilmeniz için konum bilgisini aşağıda paylaştık.
           </p>
 
           <div class="map-card">
-            <p id="locationVenueText" class="map-place-name">Masal Kır Düğün Salonu</p>
+            <div class="map-head">
+              <div class="map-icon">📍</div>
+
+              <div>
+                <p id="locationVenueText" class="map-place-name">Masal Kır Düğün Salonu</p>
+                <span>Yol tarifi için haritayı açabilirsiniz.</span>
+              </div>
+            </div>
 
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2390.2282605512105!2d28.209686927998707!3d38.09859699372296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b8ebe07971c9e1%3A0x67858ba686944b4c!2zTWFzYWwgS8SxciBEw7zEn8O8biBTYWxvbnU!5e0!3m2!1str!2str!4v1779453252166!5m2!1str!2str"
@@ -144,9 +156,13 @@
           </a>
         </section>
 
-        <section class="story-section message-section">
+        <section id="messageSection" class="story-section message-section reveal-section">
           <span class="step-label">03</span>
-          <h2>Güzel Notlarınız</h2>
+
+          <div class="section-heading">
+            <p>Hatıra Defteri</p>
+            <h2>Güzel Notlarınız</h2>
+          </div>
 
           <p class="section-text">
             Bu özel güne eşlik edecek güzel dileklerinizi yazabilir, dilerseniz küçük bir çizimle bize hatıra bırakabilirsiniz.
@@ -186,23 +202,28 @@
           </form>
         </section>
 
-        <section class="story-section upload-section">
+        <section class="story-section upload-section reveal-section">
           <span class="step-label">04</span>
-          <h2>Anılarınızı Paylaşın</h2>
+
+          <div class="section-heading">
+            <p>Anı Galerisi</p>
+            <h2>Anılarınızı Paylaşın</h2>
+          </div>
 
           <p class="section-text">
             Düğünde yakaladığınız en güzel kareleri bizimle paylaşabilirsiniz.
           </p>
 
-          <form id="photoForm" class="form-card">
+          <form id="photoForm" class="form-card upload-form-card">
             <label>
               Yükleyen Kişi
               <input id="photoGuestName" type="text" placeholder="Adınız Soyadınız" required />
             </label>
 
-            <label>
+            <label class="file-label">
               Fotoğraf
               <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" required />
+              <span id="selectedPhotoName">Henüz dosya seçilmedi</span>
             </label>
 
             <button type="submit" class="main-button full-button">
@@ -214,7 +235,7 @@
         </section>
       </div>
 
-      <section class="story-section final-section">
+      <section class="story-section final-section reveal-section">
         <p class="eyebrow">Teşekkürler</p>
 
         <h2>
@@ -229,6 +250,6 @@
   </main>
 
   <script src="assets/js/supabase-config.js"></script>
-  <script src="assets/js/script.js"></script>
+  <script src="assets/js/script.js?v=frame-scroll-motion-2"></script>
 </body>
 </html>

@@ -9,11 +9,10 @@ let isDrawing = false;
 let hasDrawing = false;
 
 let heroLottie = null;
-let introOpened = false;
 
+const introFrameCanvas = document.getElementById("introFrameCanvas");
 const introScreen = document.getElementById("introScreen");
-const invitationContent = document.getElementById("invitationContent");
-const introGateVideo = document.getElementById("introGateVideo");
+const introProgressBar = document.getElementById("introProgressBar");
 
 const heroFloralAnimation = document.getElementById("heroFloralAnimation");
 
@@ -35,16 +34,22 @@ const clearDrawingBtn = document.getElementById("clearDrawingBtn");
 
 const photoForm = document.getElementById("photoForm");
 const photoStatus = document.getElementById("photoStatus");
+const photoInput = document.getElementById("photoInput");
+const selectedPhotoName = document.getElementById("selectedPhotoName");
 
 document.addEventListener("DOMContentLoaded", async () => {
-  setupIntroGateAutoPlay();
+  setupScrollDrivenIntroFrames();
   setupHeroAnimation();
   setupDrawingCanvas();
   setupMessageForm();
   setupPhotoForm();
+  setupSelectedPhotoName();
+  setupRevealSections();
 
   await loadWeddingData();
 });
+
+/* DATA */
 
 async function loadWeddingData() {
   try {
@@ -121,52 +126,193 @@ function renderWeddingData(data) {
   }
 }
 
-function setupIntroGateAutoPlay() {
-  if (!introScreen || !invitationContent || !introGateVideo) {
-    console.error("Intro gate elementlerinden biri bulunamadı.");
+/* SCROLL DRIVEN FRAME CANVAS */
+
+function setupScrollDrivenIntroFrames() {
+  const canvas = document.getElementById("introFrameCanvas");
+  const intro = document.getElementById("introScreen");
+  const progressBar = document.getElementById("introProgressBar");
+  const introSticky = document.querySelector(".intro-sticky");
+
+  if (!canvas || !intro || !introSticky) {
+    console.error("Intro canvas, intro alanı veya sticky alan bulunamadı.");
     return;
   }
 
-  introGateVideo.muted = true;
-  introGateVideo.playsInline = true;
-  introGateVideo.currentTime = 0;
+  const context = canvas.getContext("2d");
 
-  introGateVideo.addEventListener("ended", showInvitationContent);
+  const frameCount = 240;
+  const images = [];
+  let loadedCount = 0;
+  let currentFrame = 1;
+  let ticking = false;
 
-  introGateVideo.addEventListener("error", () => {
-    console.error("Intro video yüklenemedi.");
-    setTimeout(showInvitationContent, 1200);
+  function getFramePath(index) {
+    const frameNumber = String(index).padStart(4, "0");
+    return `assets/frames/gate_${frameNumber}.jpg`;
+  }
+
+  function preloadFrames() {
+    for (let index = 1; index <= frameCount; index += 1) {
+      const image = new Image();
+      image.src = getFramePath(index);
+
+      image.onload = () => {
+        loadedCount += 1;
+
+        if (index === 1) {
+          drawFrame(1);
+        }
+
+        if (loadedCount === frameCount) {
+          console.log("Tüm intro frame görselleri yüklendi:", loadedCount);
+        }
+      };
+
+      image.onerror = () => {
+        console.warn("Frame yüklenemedi:", image.src);
+      };
+
+      images[index] = image;
+    }
+  }
+
+  function resizeCanvas() {
+    const ratio = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+
+    canvas.width = rect.width * ratio;
+    canvas.height = rect.height * ratio;
+
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    drawFrame(currentFrame);
+  }
+
+  function drawFrame(index) {
+    const image = images[index];
+
+    if (!image || !image.complete || !image.naturalWidth) return;
+
+    const canvasWidth = canvas.clientWidth;
+    const canvasHeight = canvas.clientHeight;
+
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const canvasRatio = canvasWidth / canvasHeight;
+
+    let drawWidth;
+    let drawHeight;
+    let offsetX;
+    let offsetY;
+
+    if (imageRatio > canvasRatio) {
+      drawHeight = canvasHeight;
+      drawWidth = drawHeight * imageRatio;
+      offsetX = (canvasWidth - drawWidth) / 2;
+      offsetY = 0;
+    } else {
+      drawWidth = canvasWidth;
+      drawHeight = drawWidth / imageRatio;
+      offsetX = 0;
+      offsetY = (canvasHeight - drawHeight) / 2;
+    }
+
+    context.clearRect(0, 0, canvasWidth, canvasHeight);
+    context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+  }
+
+  function getProgress() {
+    const rect = intro.getBoundingClientRect();
+    const scrollDistance = intro.offsetHeight - window.innerHeight;
+
+    if (scrollDistance <= 0) return 1;
+
+    const scrolled = Math.min(Math.max(-rect.top, 0), scrollDistance);
+
+    return scrolled / scrollDistance;
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function lerp(start, end, progress) {
+    return start + (end - start) * progress;
+  }
+
+  function smoothStep(edge0, edge1, value) {
+    const x = clamp((value - edge0) / (edge1 - edge0), 0, 1);
+    return x * x * (3 - 2 * x);
+  }
+
+  function updateIntroMotion(progress) {
+    const centerMoveProgress = smoothStep(0.12, 0.62, progress);
+    const fadeProgress = smoothStep(0.74, 1, progress);
+
+    const frameScale = lerp(1.02, 1.16, centerMoveProgress);
+    const contentY = lerp(0, -145, centerMoveProgress);
+    const contentScale = lerp(1, 1.06, centerMoveProgress) - fadeProgress * 0.08;
+    const titleScale = lerp(1, 1.08, centerMoveProgress) - fadeProgress * 0.06;
+    const contentOpacity = clamp(1 - fadeProgress * 0.72, 0.28, 1);
+    const gradientOpacity = clamp(1 - fadeProgress * 0.28, 0.62, 1);
+    const blur = lerp(0, 1.2, fadeProgress);
+
+    introSticky.style.setProperty("--intro-frame-scale", frameScale.toFixed(3));
+    introSticky.style.setProperty("--intro-content-y", `${contentY.toFixed(1)}px`);
+    introSticky.style.setProperty("--intro-content-scale", contentScale.toFixed(3));
+    introSticky.style.setProperty("--intro-title-scale", titleScale.toFixed(3));
+    introSticky.style.setProperty("--intro-content-opacity", contentOpacity.toFixed(3));
+    introSticky.style.setProperty("--intro-gradient-opacity", gradientOpacity.toFixed(3));
+    introSticky.style.setProperty("--intro-blur", `${blur.toFixed(2)}px`);
+  }
+
+  function updateByScroll() {
+    if (ticking) return;
+
+    ticking = true;
+
+    requestAnimationFrame(() => {
+      ticking = false;
+
+      const progress = getProgress();
+
+      if (progressBar) {
+        progressBar.style.width = `${Math.round(progress * 100)}%`;
+      }
+
+      updateIntroMotion(progress);
+
+      const targetFrame = Math.min(
+        frameCount,
+        Math.max(1, Math.round(progress * (frameCount - 1)) + 1)
+      );
+
+      if (targetFrame === currentFrame) return;
+
+      currentFrame = targetFrame;
+      drawFrame(currentFrame);
+
+      console.log("Intro frame:", currentFrame, "Progress:", progress.toFixed(3));
+    });
+  }
+
+  resizeCanvas();
+  preloadFrames();
+  updateIntroMotion(0);
+
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    updateByScroll();
   });
 
-  const playPromise = introGateVideo.play();
-
-  if (playPromise !== undefined) {
-    playPromise
-      .then(() => {
-        introScreen.classList.add("is-video-playing");
-      })
-      .catch((error) => {
-        console.error("Intro video otomatik oynatılamadı:", error);
-        setTimeout(showInvitationContent, 1200);
-      });
-  } else {
-    introScreen.classList.add("is-video-playing");
-  }
-}
-
-function showInvitationContent() {
-  if (introOpened) return;
-
-  introOpened = true;
-
-  introScreen.classList.add("intro-leaving");
+  window.addEventListener("scroll", updateByScroll, { passive: true });
 
   setTimeout(() => {
-    introScreen.classList.add("is-hidden");
-    invitationContent.classList.remove("is-hidden");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, 900);
+    updateByScroll();
+  }, 300);
 }
+
+/* ANIMATIONS */
 
 function setupHeroAnimation() {
   if (!heroFloralAnimation || typeof lottie === "undefined") return;
@@ -180,6 +326,33 @@ function setupHeroAnimation() {
   });
 }
 
+function setupRevealSections() {
+  const sections = document.querySelectorAll(".reveal-section");
+
+  if (!sections.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    sections.forEach((section) => section.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.18
+    }
+  );
+
+  sections.forEach((section) => observer.observe(section));
+}
+
 /* DRAWING CANVAS */
 
 function setupDrawingCanvas() {
@@ -189,10 +362,10 @@ function setupDrawingCanvas() {
 
   drawingContext = drawingCanvas.getContext("2d");
 
-  resizeCanvas();
+  resizeDrawingCanvas();
 
   window.addEventListener("resize", () => {
-    resizeCanvas();
+    resizeDrawingCanvas();
   });
 
   drawingCanvas.addEventListener("pointerdown", startDrawing);
@@ -206,7 +379,7 @@ function setupDrawingCanvas() {
   }
 }
 
-function resizeCanvas() {
+function resizeDrawingCanvas() {
   if (!drawingCanvas || !drawingContext) return;
 
   const rect = drawingCanvas.getBoundingClientRect();
@@ -220,7 +393,7 @@ function resizeCanvas() {
   drawingContext.lineCap = "round";
   drawingContext.lineJoin = "round";
   drawingContext.lineWidth = 3;
-  drawingContext.strokeStyle = "#8a5f5b";
+  drawingContext.strokeStyle = "#b76f6a";
 }
 
 function getPointerPosition(event) {
@@ -471,7 +644,26 @@ function setupPhotoForm() {
 
     photoForm.reset();
 
+    if (selectedPhotoName) {
+      selectedPhotoName.textContent = "Henüz dosya seçilmedi";
+    }
+
     setTemporaryStatus(photoStatus, "Fotoğraf başarıyla yüklendi. Çok teşekkür ederiz.", "success");
+  });
+}
+
+function setupSelectedPhotoName() {
+  if (!photoInput || !selectedPhotoName) return;
+
+  photoInput.addEventListener("change", () => {
+    const file = photoInput.files[0];
+
+    if (!file) {
+      selectedPhotoName.textContent = "Henüz dosya seçilmedi";
+      return;
+    }
+
+    selectedPhotoName.textContent = file.name;
   });
 }
 
