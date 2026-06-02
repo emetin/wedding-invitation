@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Düğün Davetiyesi Admin Panel</title>
+
+  <link rel="stylesheet" href="style.css?v=sema-emre-20260602" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+  <main class="admin-app">
+    <section id="loginScreen" class="login-screen">
+      <div class="login-card">
+        <p class="eyebrow">Admin Panel</p>
+        <h1>Düğün Davetiyesi Yönetimi</h1>
+        <p class="soft-text">
+          Katılımcı notlarını, çizimli mesajları ve yüklenen fotoğrafları görüntülemek için giriş yapın.
+        </p>
+
+        <form id="loginForm" class="login-form">
+          <label>
+            Panel Şifresi
+            <input id="adminPassword" type="password" placeholder="Şifre" required />
+          </label>
+
+          <button type="submit">Giriş Yap</button>
+
+          <p id="loginStatus" class="status-message"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="dashboardScreen" class="dashboard-screen is-hidden">
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow">Düğün Paneli</p>
+          <h1 id="dashboardTitle">Sema & Emre</h1>
+          <p id="dashboardDate" class="soft-text">22 Haziran 2026</p>
+        </div>
+
+        <button id="logoutBtn" class="ghost-button">Çıkış</button>
+      </header>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <span>Toplam Not</span>
+          <strong id="totalMessages">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Geliyorum</span>
+          <strong id="totalComing">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Kişi Sayısı</span>
+          <strong id="totalGuests">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span>Fotoğraf</span>
+          <strong id="totalPhotos">0</strong>
+        </article>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-heading">
+          <div>
+            <h2>Katılımcı Notları</h2>
+            <p>Yazılı ve çizimli notlar burada listelenir.</p>
+          </div>
+
+          <button id="refreshMessagesBtn" class="small-button" type="button">Yenile</button>
+        </div>
+
+        <div id="messagesList" class="messages-list"></div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-heading">
+          <div>
+            <h2>Yüklenen Fotoğraflar</h2>
+            <p>Katılımcıların yüklediği düğün fotoğrafları.</p>
+          </div>
+
+          <button id="refreshPhotosBtn" class="small-button" type="button">Yenile</button>
+        </div>
+
+        <div id="photosGrid" class="photos-grid"></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="../assets/js/supabase-config.js?v=sema-emre-20260602"></script>
+  <script src="admin.js?v=sema-emre-20260602"></script>
+</body>
+</html>
